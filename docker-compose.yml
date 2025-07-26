@@ -19,7 +19,7 @@ services:
   account-service:
     container_name: account-service
     build:
-      context: ./account_service
+      context: ./account-service
       dockerfile: Dockerfile
     ports:
       - "8081:8081"

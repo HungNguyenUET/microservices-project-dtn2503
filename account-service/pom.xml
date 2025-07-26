@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>vti.dtn</groupId>
-	<artifactId>account_service</artifactId>
+	<artifactId>account-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>account_service</name>
+	<name>account-service</name>
 	<description>Account Service</description>
 	<url/>
 	<licenses>
