@@ -1,9 +1,7 @@
 package vti.dtn.auth_service.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import vti.dtn.auth_service.enums.Role;
@@ -15,6 +13,8 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class UserEntity implements UserDetails {
     @Id
