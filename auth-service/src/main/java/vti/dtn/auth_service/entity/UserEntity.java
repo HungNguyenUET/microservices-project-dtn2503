@@ -4,14 +4,19 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import vti.dtn.auth_service.enums.Role;
+
+import java.util.Collection;
+import java.util.List;
 
 @Setter
 @Getter
 @Builder
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,4 +44,9 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 }
