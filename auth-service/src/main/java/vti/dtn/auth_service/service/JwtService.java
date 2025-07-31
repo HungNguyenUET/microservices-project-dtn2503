@@ -5,16 +5,22 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import vti.dtn.auth_service.entity.UserEntity;
+import vti.dtn.auth_service.repo.UserRepository;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
     @Value("${app.auth.tokenSecret}")
     private String secretKey;
@@ -24,6 +30,8 @@ public class JwtService {
 
     @Value("${app.auth.refreshTokenExpiration}")
     private long refreshExpiration;
+
+    private final UserRepository userRepository;
 
     public String generateAccessToken(UserDetails userDetails) {
         return buildToken(Map.of(), userDetails, expiration);
@@ -73,4 +81,17 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public boolean validateToken(String token) {
+        if (isTokenExpired(token)) {
+            return false;
+        }
+
+        String username = extractUsername(token);
+        if (!StringUtils.hasText(username)) {
+            return false;
+        }
+
+        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+        return userEntity.isPresent();
+    }
 }
