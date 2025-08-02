@@ -29,6 +29,7 @@ public class UserService {
         Optional<UserEntity> userEntityByEmail = userRepository.findByEmail(email);
         Optional<UserEntity> userEntityByUsername = userRepository.findByUsername(userName);
 
+        // Check if the user already exists
         if (userEntityByEmail.isPresent() || userEntityByUsername.isPresent()) {
             return RegisterResponse.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
