@@ -9,7 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
-            "/api/v1/user/register",
+            "/api/v1/auth/user/register",
             "/api/v1/auth/login",
             "/api/v1/auth/refresh-token"
     };
