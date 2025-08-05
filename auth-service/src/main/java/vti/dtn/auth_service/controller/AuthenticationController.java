@@ -36,8 +36,10 @@ public class AuthenticationController {
     @GetMapping("/verify")
     public ResponseEntity<VerifyTokenResponse> verifyToken(@RequestHeader("Authorization") String authHeader) {
         log.info("Verifying token: {}", authHeader);
-        // TODO: Implement verifyToken
-        return null;
+        VerifyTokenResponse response = authenticationService.verifyToken(authHeader);
+        return ResponseEntity
+                .status(response.getStatus())
+                .body(response);
     }
 
 }
