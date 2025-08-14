@@ -54,4 +54,9 @@ public class UserService {
                 .build();
     }
 
+    public UserEntity findByUsername(String username) {
+        Optional<UserEntity> userOptional = userRepository.findByUsername(username);
+        return userOptional.orElse(null);
+    }
+
 }
