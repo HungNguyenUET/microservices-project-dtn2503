@@ -17,7 +17,7 @@ import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AccountControllerTest {
+class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
