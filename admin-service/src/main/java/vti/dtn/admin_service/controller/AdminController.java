@@ -1,8 +1,10 @@
 package vti.dtn.admin_service.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import vti.dtn.admin_service.dto.DepartmentDTO;
 import vti.dtn.admin_service.service.AdminService;
@@ -18,6 +20,12 @@ public class AdminController {
     @GetMapping("/departments")
     public List<DepartmentDTO> getDepartments() {
         return adminService.getDepartments();
+    }
+
+    @GetMapping("/test-kafka")
+    public ResponseEntity<String> testKafka(@RequestParam String message) {
+        String responseMsg = adminService.testKafka(message);
+        return ResponseEntity.ok(responseMsg);
     }
 
 }
