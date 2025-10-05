@@ -50,14 +50,24 @@ public class UserEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
 
-    @Column(name = "provider_id", length = 100, nullable = true)
+    @Column(name = "provider_id", length = 100)
     private String providerId;
 
-    @Column(name = "image_url", length = 200, nullable = true)
+    @Column(name = "image_url", length = 200)
     private String imageUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
     }
 }

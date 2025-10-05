@@ -2,7 +2,6 @@ package vti.dtn.auth_service.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.util.StringUtils;
 import vti.dtn.auth_service.entity.UserEntity;
 import vti.dtn.auth_service.repo.UserRepository;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
@@ -43,11 +43,11 @@ public class JwtService {
 
     private String buildToken(Map<String, Object> claims, UserDetails userDetails, long expiration) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(secretKey), SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSignInKey(secretKey))
                 .compact();
     }
 
@@ -57,11 +57,11 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignInKey(secretKey))
+        return Jwts.parser()
+                .decryptWith((SecretKey) getSignInKey(secretKey))
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseEncryptedClaims(token)
+                .getPayload();
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
