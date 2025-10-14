@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import vti.dtn.auth_service.filter.JwtFilter;
@@ -15,7 +18,7 @@ import vti.dtn.auth_service.oauth2.repository.HttpCookieOAuthorizationRequestRep
 import vti.dtn.auth_service.oauth2.service.CustomOAuth2UserService;
 
 @Configuration
-
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
@@ -46,6 +49,8 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .anyRequest().authenticated())
 
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -63,8 +68,7 @@ public class SecurityConfiguration {
                         )
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
-                )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                );
         return http.build();
     }
 

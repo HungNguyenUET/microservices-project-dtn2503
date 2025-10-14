@@ -51,16 +51,16 @@ public class JwtService {
                 .compact();
     }
 
-    private Key getSignInKey(String secretKey) {
+    private SecretKey getSignInKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .decryptWith((SecretKey) getSignInKey(secretKey))
+                .verifyWith(getSignInKey(secretKey))
                 .build()
-                .parseEncryptedClaims(token)
+                .parseSignedClaims(token)
                 .getPayload();
     }
 
